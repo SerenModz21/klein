@@ -1,0 +1,142 @@
+_type: export
+__export_format: 4
+__export_date: 2021-07-30T19:58:24.324Z
+__export_source: insomnia.desktop.app:v2021.4.1
+resources:
+  - _id: req_568094d77c4b4b0a889e4b0f3d5ca952
+    parentId: fld_45668604a381473ab5f76f9559c2c951
+    modified: 1627674346803
+    created: 1627666905678
+    url: http://localhost:8080/e79add17?delete=x
+    name: Delete URL
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1627666905678
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_45668604a381473ab5f76f9559c2c951
+    parentId: wrk_4ea58110ca0f46a8a612cad8e2f80f4a
+    modified: 1627666891903
+    created: 1627666891903
+    name: DELETE
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1627666891903
+    _type: request_group
+  - _id: wrk_4ea58110ca0f46a8a612cad8e2f80f4a
+    parentId: null
+    modified: 1627662825212
+    created: 1627662411395
+    name: Klein
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: req_da52957149064796ba83fc1e4acab3bb
+    parentId: fld_987bbe085b5949bb8ed066a3083cc8f9
+    modified: 1627674105985
+    created: 1627666445113
+    url: http://localhost:8080/e79add17
+    name: Get short URL
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1627666445190
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_987bbe085b5949bb8ed066a3083cc8f9
+    parentId: wrk_4ea58110ca0f46a8a612cad8e2f80f4a
+    modified: 1627666436580
+    created: 1627666436580
+    name: GET
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1627666436580
+    _type: request_group
+  - _id: req_70ed5ef6903b4b3ca7460346b3576137
+    parentId: fld_40dbeb52dc6741fba99d942f702309db
+    modified: 1627663174918
+    created: 1627662871602
+    url: http://localhost:8080/shorten?url=https://google.com
+    name: Shorten URL
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1627662871602
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_40dbeb52dc6741fba99d942f702309db
+    parentId: wrk_4ea58110ca0f46a8a612cad8e2f80f4a
+    modified: 1627662935852
+    created: 1627662935852
+    name: POST
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1627662935852
+    _type: request_group
+  - _id: env_902ce2f0555165f1a370e3ed20e70607a5d68793
+    parentId: wrk_4ea58110ca0f46a8a612cad8e2f80f4a
+    modified: 1627675043647
+    created: 1627662411425
+    name: Base Environment
+    data: {}
+    dataPropertyOrder: {}
+    color: null
+    isPrivate: false
+    metaSortKey: 1627662411425
+    _type: environment
+  - _id: jar_902ce2f0555165f1a370e3ed20e70607a5d68793
+    parentId: wrk_4ea58110ca0f46a8a612cad8e2f80f4a
+    modified: 1627666878018
+    created: 1627662411426
+    name: Default Jar
+    cookies:
+      - key: CONSENT
+        value: PENDING+446
+        expires: 2038-01-01T00:00:00.000Z
+        domain: google.com
+        path: /
+        secure: true
+        hostOnly: false
+        creation: 2021-07-30T17:41:18.012Z
+        lastAccessed: 2021-07-30T17:41:18.012Z
+        id: "6665347531967383"
+    _type: cookie_jar
+  - _id: spc_9c628a3c4c8d4ecf9f900066de98e070
+    parentId: wrk_4ea58110ca0f46a8a612cad8e2f80f4a
+    modified: 1627662411396
+    created: 1627662411396
+    fileName: Insomnia
+    contents: ""
+    contentType: yaml
+    _type: api_spec

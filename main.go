@@ -16,14 +16,14 @@ func main() {
 	configuration := config.GetConfig()
 	ctx := context.TODO()
 
-	db, error := database.CreateClient(ctx, configuration.Mongo)
-	if error != nil {
-		log.Panic(error)
-	}
+	// It's gonna panic and exit either way, don't bother checking for errors.
+	db, _ := database.ConnectMongo(ctx, configuration.Mongo)
+	redisClient, _ := database.ConnectRedis(ctx, configuration.Redis)
 
 	urls := services.UrlClient{
 		Ctx:        ctx,
 		Collection: db.Collection("urls"),
+		Redis: redisClient,
 	}
 
 	router := mux.NewRouter()

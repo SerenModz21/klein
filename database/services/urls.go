@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/mediocregopher/radix/v4"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"sach.demiboy.me/database/models"
@@ -18,12 +19,14 @@ type IUrl interface {
 type UrlClient struct {
 	Ctx        context.Context
 	Collection *mongo.Collection
+	Redis      radix.Client
 }
 
 func (client *UrlClient) Insert(document models.Url) (models.Url, error) {
 	url := models.Url{}
 
 	_, error := client.Collection.InsertOne(client.Ctx, document)
+	client.Redis.Do(client.Ctx, radix.Cmd(nil, "HSET", document.Slug, "DeletionKey", document.DeletionKey, "Long", document.Long, "Slug", document.Slug))
 
 	if error != nil {
 		return url, error
@@ -34,10 +37,19 @@ func (client *UrlClient) Insert(document models.Url) (models.Url, error) {
 
 func (client *UrlClient) Get(slug string) (models.Url, error) {
 	url := models.Url{}
+	cached := false
 
-	error := client.Collection.FindOne(client.Ctx, bson.M{"slug": slug}).Decode(&url)
+	client.Redis.Do(client.Ctx, radix.Cmd(&cached, "EXISTS", slug))
 
-	return url, error
+	if cached {
+		client.Redis.Do(client.Ctx, radix.Cmd(&url, "HGETALL", slug))
+		return url, nil
+	} else {
+		error := client.Collection.FindOne(client.Ctx, bson.M{"slug": slug}).Decode(&url)
+		client.Redis.Do(client.Ctx, radix.Cmd(nil, "HSET", url.Slug, "DeletionKey", url.DeletionKey, "Long", url.Long, "Slug", url.Slug))
+
+		return url, error
+	}
 }
 
 func (client *UrlClient) Delete(slug string, deletionKey string) (models.Url, error) {

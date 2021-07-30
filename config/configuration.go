@@ -8,6 +8,7 @@ import (
 type Configuration struct {
 	Port  string
 	Mongo string
+	Redis string
 }
 
 func GetConfig() Configuration {
