@@ -10,7 +10,7 @@ import (
 func RandomString() string {
 	bytes := make([]byte, 4)
 	rand.Read(bytes)
-	
+
 	return fmt.Sprintf("%x", bytes)
 }
 

@@ -12,7 +12,7 @@ type Configuration struct {
 
 func GetConfig() Configuration {
 	configuration := Configuration{}
-	
+
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("./config")

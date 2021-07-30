@@ -17,12 +17,11 @@ type NormalResponse struct {
 }
 
 type ShortenResponse struct {
-	Success bool `json:"success"`
-	Slug string `json:"slug"`
-	Long string `json:"long"`
-	Short string `json:"short"`
+	Success bool   `json:"success"`
+	Slug    string `json:"slug"`
+	Long    string `json:"long"`
+	Short   string `json:"short"`
 }
-
 
 func RedirectUrl(service services.IUrl) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
@@ -57,11 +56,11 @@ func ShortenUrl(service services.IUrl) http.HandlerFunc {
 				Success: false,
 			})
 		} else {
-			util.WriteJson(rw, 500, ShortenResponse {
+			util.WriteJson(rw, 500, ShortenResponse{
 				Success: true,
-				Slug: response.Slug,
-				Long: response.Long,
-				Short: fmt.Sprintf("http://localhost:8080/%s", response.Slug),
+				Slug:    response.Slug,
+				Long:    response.Long,
+				Short:   fmt.Sprintf("http://localhost:8080/%s", response.Slug),
 			})
 		}
 	}

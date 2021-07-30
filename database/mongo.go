@@ -11,7 +11,7 @@ import (
 
 func CreateClient(ctx context.Context, uri string) (*mongo.Database, error) {
 	log.Info("connecting to mongodb")
-	
+
 	client, error := mongo.Connect(ctx, options.Client().ApplyURI(uri).SetAppName("klein"))
 
 	if error != nil {

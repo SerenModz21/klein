@@ -22,12 +22,12 @@ func main() {
 	}
 
 	urls := services.UrlClient{
-		Ctx: ctx,
+		Ctx:        ctx,
 		Collection: db.Collection("urls"),
 	}
 
 	router := mux.NewRouter()
-	
+
 	router.HandleFunc("/shorten", routes.ShortenUrl(&urls)).Methods(http.MethodPost)
 	router.HandleFunc("/{slug}", routes.RedirectUrl(&urls)).Methods(http.MethodGet)
 
