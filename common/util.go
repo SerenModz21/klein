@@ -1,4 +1,4 @@
-package util
+package common
 
 import (
 	"crypto/rand"
@@ -7,8 +7,8 @@ import (
 	"net/http"
 )
 
-func RandomString() string {
-	bytes := make([]byte, 4)
+func RandomString(len int) string {
+	bytes := make([]byte, len)
 	rand.Read(bytes)
 
 	return fmt.Sprintf("%x", bytes)

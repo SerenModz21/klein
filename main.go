@@ -30,6 +30,7 @@ func main() {
 
 	router.HandleFunc("/shorten", routes.ShortenUrl(&urls)).Methods(http.MethodPost)
 	router.HandleFunc("/{slug}", routes.RedirectUrl(&urls)).Methods(http.MethodGet)
+	router.HandleFunc("/{slug}", routes.DeleteUrl(&urls)).Methods(http.MethodDelete)
 
 	log.Info("now listening on port", configuration.Port)
 	http.ListenAndServe(configuration.Port, router)

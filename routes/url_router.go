@@ -6,9 +6,10 @@ import (
 	"net/url"
 
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
+	"sach.demiboy.me/common"
 	"sach.demiboy.me/database/models"
 	"sach.demiboy.me/database/services"
-	"sach.demiboy.me/util"
 )
 
 type NormalResponse struct {
@@ -21,13 +22,17 @@ type ShortenResponse struct {
 	Slug    string `json:"slug"`
 	Long    string `json:"long"`
 	Short   string `json:"short"`
+	Key     string `json:"key"`
+}
+
+type DeleteResponse struct {
+	Success bool       `json:"success"`
+	Url     models.Url `json:"url"`
 }
 
 func RedirectUrl(service services.IUrl) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		params := mux.Vars(r)
-
-		if result, error := service.Get(params["slug"]); error != nil {
+		if result, error := service.Get(mux.Vars(r)["slug"]); error != nil {
 			rw.WriteHeader(400)
 			rw.Write([]byte("<h1>Invalid slug provided.</h1>"))
 		} else {
@@ -41,7 +46,7 @@ func ShortenUrl(service services.IUrl) http.HandlerFunc {
 		query := r.URL.Query().Get("url")
 
 		if _, error := url.ParseRequestURI(query); error != nil {
-			util.WriteJson(rw, http.StatusBadRequest, NormalResponse{
+			common.WriteJson(rw, http.StatusBadRequest, NormalResponse{
 				Message: "No url query provided or invalid url query provided, example: 'https://link.shortener/shorten?url=https://google.com'",
 				Success: false,
 			})
@@ -50,19 +55,38 @@ func ShortenUrl(service services.IUrl) http.HandlerFunc {
 		}
 
 		if response, error := service.Insert(models.Url{
-			Long: query,
-			Slug: util.RandomString(),
+			Long:        query,
+			Slug:        common.RandomString(4),
+			DeletionKey: common.RandomString(8),
 		}); error != nil {
-			util.WriteJson(rw, http.StatusInternalServerError, NormalResponse{
+			common.WriteJson(rw, http.StatusInternalServerError, NormalResponse{
 				Message: error.Error(),
 				Success: false,
 			})
 		} else {
-			util.WriteJson(rw, http.StatusAccepted, ShortenResponse{
+			log.Info(response.Long, " -> ", response.Slug)
+			common.WriteJson(rw, http.StatusAccepted, ShortenResponse{
 				Success: true,
 				Slug:    response.Slug,
 				Long:    response.Long,
 				Short:   fmt.Sprintf("http://localhost:8080/%s", response.Slug),
+				Key:     response.DeletionKey,
+			})
+		}
+	}
+}
+
+func DeleteUrl(service services.IUrl) http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+		if data, error := service.Delete(mux.Vars(r)["slug"], r.URL.Query().Get("delete")); error != nil {
+			common.WriteJson(rw, http.StatusForbidden, NormalResponse{
+				Success: false,
+				Message: error.Error(),
+			})
+		} else {
+			common.WriteJson(rw, http.StatusAccepted, DeleteResponse{
+				Success: true,
+				Url:     data,
 			})
 		}
 	}
