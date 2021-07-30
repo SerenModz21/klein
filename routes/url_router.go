@@ -45,6 +45,8 @@ func ShortenUrl(service services.IUrl) http.HandlerFunc {
 				Message: "No url query provided or invalid url query provided, example: 'https://link.shortener/shorten?url=https://google.com'",
 				Success: false,
 			})
+
+			return
 		}
 
 		if response, error := service.Insert(models.Url{
@@ -56,7 +58,7 @@ func ShortenUrl(service services.IUrl) http.HandlerFunc {
 				Success: false,
 			})
 		} else {
-			util.WriteJson(rw, 500, ShortenResponse{
+			util.WriteJson(rw, http.StatusAccepted, ShortenResponse{
 				Success: true,
 				Slug:    response.Slug,
 				Long:    response.Long,
