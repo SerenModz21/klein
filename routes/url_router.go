@@ -30,9 +30,19 @@ type DeleteResponse struct {
 	Url     models.Url `json:"url"`
 }
 
-func RedirectUrl(service services.IUrl) http.HandlerFunc {
+type IUrlRouter interface {
+	RedirectUrl() http.HandlerFunc
+	ShortenUrl() http.HandlerFunc
+	DeleteUrl() http.HandlerFunc
+}
+
+type URLRouter struct {
+	Service services.IUrl
+}
+
+func (router URLRouter) RedirectUrl() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		if result, error := service.Get(mux.Vars(r)["slug"]); error != nil {
+		if result, error := router.Service.Get(mux.Vars(r)["slug"]); error != nil {
 			rw.WriteHeader(400)
 			rw.Write([]byte("<h1>Invalid slug provided.</h1>"))
 		} else {
@@ -41,7 +51,7 @@ func RedirectUrl(service services.IUrl) http.HandlerFunc {
 	}
 }
 
-func ShortenUrl(service services.IUrl) http.HandlerFunc {
+func (router URLRouter) ShortenUrl() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query().Get("url")
 
@@ -54,7 +64,7 @@ func ShortenUrl(service services.IUrl) http.HandlerFunc {
 			return
 		}
 
-		if response, error := service.Insert(models.Url{
+		if response, error := router.Service.Insert(models.Url{
 			Long:        query,
 			Slug:        common.RandomString(4),
 			DeletionKey: common.RandomString(8),
@@ -76,9 +86,9 @@ func ShortenUrl(service services.IUrl) http.HandlerFunc {
 	}
 }
 
-func DeleteUrl(service services.IUrl) http.HandlerFunc {
+func (router URLRouter) DeleteUrl() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		if data, error := service.Delete(mux.Vars(r)["slug"], r.URL.Query().Get("delete")); error != nil {
+		if data, error := router.Service.Delete(mux.Vars(r)["slug"], r.URL.Query().Get("delete")); error != nil {
 			common.WriteJson(rw, http.StatusForbidden, NormalResponse{
 				Success: false,
 				Message: fmt.Sprintf("Either the user was not found or you provided an invalid key, error for debugging purposes: %s", error.Error()),

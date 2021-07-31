@@ -20,17 +20,16 @@ func main() {
 	db, _ := database.ConnectMongo(ctx, configuration.Mongo)
 	redisClient, _ := database.ConnectRedis(ctx, configuration.Redis)
 
-	urls := services.UrlClient{
+	router := mux.NewRouter()
+	urlRouter := routes.URLRouter{Service: &services.UrlClient{
 		Ctx:        ctx,
 		Collection: db.Collection("urls"),
-		Redis: redisClient,
-	}
+		Redis:      redisClient,
+	}}
 
-	router := mux.NewRouter()
-
-	router.HandleFunc("/shorten", routes.ShortenUrl(&urls)).Methods(http.MethodPost)
-	router.HandleFunc("/{slug}", routes.RedirectUrl(&urls)).Methods(http.MethodGet)
-	router.HandleFunc("/{slug}", routes.DeleteUrl(&urls)).Methods(http.MethodDelete)
+	router.HandleFunc("/shorten", urlRouter.ShortenUrl()).Methods(http.MethodPost)
+	router.HandleFunc("/{slug}", urlRouter.RedirectUrl()).Methods(http.MethodGet)
+	router.HandleFunc("/{slug}", urlRouter.DeleteUrl()).Methods(http.MethodDelete)
 
 	log.Info("now listening on port", configuration.Port)
 	http.ListenAndServe(configuration.Port, router)
