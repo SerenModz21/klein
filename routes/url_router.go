@@ -12,22 +12,22 @@ import (
 	"sach.demiboy.me/database/services"
 )
 
+type ResponseData struct {
+	Slug  string `json:"slug"`
+	Long  string `json:"long"`
+	Short string `json:"short"`
+	Key   string `json:"key"`
+}
+
 type NormalResponse struct {
 	Message string `json:"message"`
 	Success bool   `json:"success"`
 }
 
-type ShortenResponse struct {
-	Success bool   `json:"success"`
-	Slug    string `json:"slug"`
-	Long    string `json:"long"`
-	Short   string `json:"short"`
-	Key     string `json:"key"`
-}
-
-type DeleteResponse struct {
-	Success bool       `json:"success"`
-	Url     models.Url `json:"url"`
+type DataResponse struct {
+	Success bool         `json:"success"`
+	Message string       `json:"message"`
+	Data    ResponseData `json:"data"`
 }
 
 type IUrlRouter interface {
@@ -75,12 +75,14 @@ func (router URLRouter) ShortenUrl() http.HandlerFunc {
 			})
 		} else {
 			log.Info(response.Long, " -> ", response.Slug)
-			common.WriteJson(rw, http.StatusAccepted, ShortenResponse{
+			common.WriteJson(rw, http.StatusAccepted, DataResponse{
 				Success: true,
-				Slug:    response.Slug,
-				Long:    response.Long,
-				Short:   fmt.Sprintf("http://localhost:8080/%s", response.Slug),
-				Key:     response.DeletionKey,
+				Message: fmt.Sprintf("Successfully shortened url %s to %s", response.Long, response.Slug),
+				Data: ResponseData{
+					Slug:  response.Slug,
+					Long:  response.Long,
+					Short: fmt.Sprintf("http://localhost:8080/%s", response.Slug),
+					Key:   response.DeletionKey},
 			})
 		}
 	}
@@ -94,9 +96,15 @@ func (router URLRouter) DeleteUrl() http.HandlerFunc {
 				Message: fmt.Sprintf("Either the user was not found or you provided an invalid key, error for debugging purposes: %s", error.Error()),
 			})
 		} else {
-			common.WriteJson(rw, http.StatusAccepted, DeleteResponse{
+			common.WriteJson(rw, http.StatusAccepted, DataResponse{
 				Success: true,
-				Url:     data,
+				Message: fmt.Sprintf("Successfully deleted slug %s.", data.Slug),
+				Data: ResponseData{
+					Slug:  data.Slug,
+					Long:  data.Long,
+					Short: fmt.Sprintf("http://localhost:8080/%s", data.Slug),
+					Key:   data.DeletionKey,
+				},
 			})
 		}
 	}
