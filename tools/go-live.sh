@@ -1,0 +1,2 @@
+# Or you can also go get it, but I didn't think about that when doing this and I'm too lazy to change aything so, deal with it.
+wget https://github.com/antsankov/go-live/releases/download/v1.0.0/go-live-linux-x64 -O go-live && chmod +x go-live

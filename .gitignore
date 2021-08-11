@@ -1,4 +1,5 @@
 # Binaries for programs and plugins
+main
 *.exe
 *.exe~
 *.dll
@@ -14,4 +15,33 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
+# Configuration files
 config.yaml
+
+# Node
+.DS_Store
+node_modules
+web/dist
+
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+tools/*
+!tools/*.sh
