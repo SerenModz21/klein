@@ -7,8 +7,6 @@ default: debug
 start: $(MAIN)
 	@go build $(MAIN)
 	@./main &
-	@cd web && yarn build |> /dev/null
-	@./tools/go-live -dir web/dist &
 	@echo To stop the process, close the terminal
 
 debug: $(MAIN)
@@ -17,8 +15,7 @@ debug: $(MAIN)
 	@echo
 	
 	@go run $(MAIN) &
-	@cd web && yarn serve
 
 tidy:
 	@go mod tidy
-	@rm -rf ./main ./web/dist
+	@rm -rf ./main
