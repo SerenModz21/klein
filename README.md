@@ -6,3 +6,6 @@ As easy as filling out config/config.yaml and running `make`. Of course, you nee
 
 # Testing
 I'm too lazy to write tests for now but you can use the `Insomnia.yaml` file to quickly test the RESTful API!
+
+# Todo
+- Cache Search/FindAll

@@ -7,6 +7,7 @@ import (
 	"github.com/mediocregopher/radix/v4"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"sach.demiboy.me/database/models"
 )
 
@@ -14,6 +15,7 @@ type IUrl interface {
 	Insert(models.Url) (models.Url, error)
 	Get(string) (models.Url, error)
 	Delete(string, string) (models.Url, error)
+	Search(interface{}, options.FindOptions) ([]models.Url, error)
 }
 
 type UrlClient struct {
@@ -50,6 +52,32 @@ func (client *UrlClient) Get(slug string) (models.Url, error) {
 
 		return url, error
 	}
+}
+
+func (client *UrlClient) Search(filter interface{}, options options.FindOptions) ([]models.Url, error) {
+	urls := []models.Url{}
+
+	if filter == nil {
+		filter = bson.M{}
+	}
+
+	if options.Limit == nil {
+		options.Limit = new(int64)
+	}
+
+	cursor, err := client.Collection.Find(client.Ctx, filter, &options)
+
+	if err != nil {
+		return urls, err
+	}
+
+	for cursor.Next(client.Ctx) {
+		row := models.Url{}
+		cursor.Decode(&row)
+		urls = append(urls, row)
+	}
+
+	return urls, nil
 }
 
 func (client *UrlClient) Delete(slug string, deletionKey string) (models.Url, error) {

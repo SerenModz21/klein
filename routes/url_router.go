@@ -9,41 +9,12 @@ import (
 	log "github.com/sirupsen/logrus"
 	"sach.demiboy.me/common"
 	"sach.demiboy.me/database/models"
-	"sach.demiboy.me/database/services"
 )
 
-type ResponseData struct {
-	Slug  string `json:"slug"`
-	Long  string `json:"long"`
-	Short string `json:"short"`
-	Key   string `json:"key"`
-}
-
-type NormalResponse struct {
-	Message string `json:"message"`
-	Success bool   `json:"success"`
-}
-
-type DataResponse struct {
-	Success bool         `json:"success"`
-	Message string       `json:"message"`
-	Data    ResponseData `json:"data"`
-}
-
-type IUrlRouter interface {
-	RedirectUrl() http.HandlerFunc
-	ShortenUrl() http.HandlerFunc
-	DeleteUrl() http.HandlerFunc
-}
-
-type URLRouter struct {
-	Service services.IUrl
-}
-
-func (router URLRouter) RedirectUrl() http.HandlerFunc {
+func (router UrlRouter) RedirectUrl() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		if result, error := router.Service.Get(mux.Vars(r)["slug"]); error != nil {
-			rw.WriteHeader(400)
+			rw.WriteHeader(http.StatusNotFound)
 			rw.Write([]byte("<h1>Invalid slug provided.</h1>"))
 		} else {
 			http.Redirect(rw, r, result.Long, http.StatusMovedPermanently)
@@ -51,7 +22,7 @@ func (router URLRouter) RedirectUrl() http.HandlerFunc {
 	}
 }
 
-func (router URLRouter) ShortenUrl() http.HandlerFunc {
+func (router UrlRouter) ShortenUrl() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query().Get("url")
 
@@ -77,7 +48,7 @@ func (router URLRouter) ShortenUrl() http.HandlerFunc {
 			log.Info(response.Long, " -> ", response.Slug)
 			common.WriteJson(rw, http.StatusAccepted, DataResponse{
 				Success: true,
-				Message: fmt.Sprintf("Successfully shortened url %s to %s", response.Long, response.Slug),
+				Message: fmt.Sprintf("Successfully shortened url %s to http://localhost:8080/%s, with deletion key %s.", response.Long, response.Slug, response.DeletionKey),
 				Data: ResponseData{
 					Slug:  response.Slug,
 					Long:  response.Long,
@@ -88,7 +59,7 @@ func (router URLRouter) ShortenUrl() http.HandlerFunc {
 	}
 }
 
-func (router URLRouter) DeleteUrl() http.HandlerFunc {
+func (router UrlRouter) DeleteUrl() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		if data, error := router.Service.Delete(mux.Vars(r)["slug"], r.URL.Query().Get("delete")); error != nil {
 			common.WriteJson(rw, http.StatusForbidden, NormalResponse{

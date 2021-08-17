@@ -14,11 +14,17 @@ func RandomString(len int) string {
 	return fmt.Sprintf("%x", bytes)
 }
 
-func WriteJson(w http.ResponseWriter, statusCode int, data interface{}) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(statusCode)
+func WriteJson(rw http.ResponseWriter, statusCode int, data interface{}) {
+	rw.Header().Set("Content-Type", "application/json; charset=utf-8")
+	rw.WriteHeader(statusCode)
 
-	if err := json.NewEncoder(w).Encode(data); err != nil {
+	if err := json.NewEncoder(rw).Encode(data); err != nil {
 		return
 	}
+}
+
+func WriteHTML(rw http.ResponseWriter, statusCode int, html string) {
+	rw.Header().Set("Content-Type", "text/html; charset=utf-8")
+	rw.WriteHeader(statusCode)
+	rw.Write([]byte(html))
 }

@@ -3,6 +3,7 @@ module sach.demiboy.me
 go 1.16
 
 require (
+	github.com/aymerick/raymond v2.0.2+incompatible
 	github.com/gorilla/mux v1.8.0
 	github.com/mediocregopher/radix/v4 v4.0.0-beta.1
 	github.com/sirupsen/logrus v1.8.1
