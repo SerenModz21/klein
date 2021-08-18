@@ -73,6 +73,7 @@ func (client *UrlClient) Search(filter interface{}, options options.FindOptions)
 
 	for cursor.Next(client.Ctx) {
 		row := models.Url{}
+		
 		cursor.Decode(&row)
 		urls = append(urls, row)
 	}

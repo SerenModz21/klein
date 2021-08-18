@@ -14,8 +14,7 @@ import (
 func (router UrlRouter) RedirectUrl() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		if result, error := router.Service.Get(mux.Vars(r)["slug"]); error != nil {
-			rw.WriteHeader(http.StatusNotFound)
-			rw.Write([]byte("<h1>Invalid slug provided.</h1>"))
+			http.Redirect(rw, r, "/", http.StatusMovedPermanently)
 		} else {
 			http.Redirect(rw, r, result.Long, http.StatusMovedPermanently)
 		}

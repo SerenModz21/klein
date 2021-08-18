@@ -7,6 +7,3 @@ I suggest running it with docker though, it's as easy as running `docker-compose
 
 # Testing
 I'm too lazy to write tests for now but you can use the `Insomnia.yaml` file to quickly test the RESTful API!
-
-# Todo
-- Cache Search/FindAll
