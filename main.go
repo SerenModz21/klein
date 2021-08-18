@@ -43,6 +43,8 @@ func main() {
 		Service: &urlService,
 	}
 
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("views/static"))))
+
 	appSubRouter := router.PathPrefix("/").Subrouter()
 	appSubRouter.HandleFunc("/", appRouter.Index()).Methods(http.MethodGet)
 	appSubRouter.HandleFunc("/{slug}", urlRouter.RedirectUrl()).Methods(http.MethodGet)
