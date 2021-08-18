@@ -13,8 +13,9 @@ WORKDIR /klein
 
 COPY --from=builder /klein/klein ./
 COPY --from=builder /klein/config/config.yaml ./config/
+COPY --from=builder /klein/views /klein/views
 
 EXPOSE 8080
 
-CMD ["sudo ./klein"]
+CMD ["./klein"]
 

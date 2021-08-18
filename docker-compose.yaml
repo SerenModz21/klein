@@ -1,0 +1,17 @@
+version: '3'
+services:
+  klein:
+    container_name: klein
+    restart: always
+    build: .
+    ports:
+      - '8080:8080'
+    links:
+      - redis
+      - mongo
+  mongo:
+    container_name: klein-mongo
+    image: 'mongo:latest'
+  redis:
+    container_name: klein-redis
+    image: 'redis:latest'

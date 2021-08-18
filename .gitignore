@@ -21,7 +21,6 @@ config.yaml
 # Node
 .DS_Store
 node_modules
-web/dist
 
 
 # local env files

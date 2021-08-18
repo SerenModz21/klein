@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/aymerick/raymond"
@@ -11,6 +12,7 @@ import (
 
 func (router AppRouter) Index() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
+		fmt.Println("Checkpoint")
 		names := []string{}
 
 		temp := int64(10)
@@ -21,9 +23,18 @@ func (router AppRouter) Index() http.HandlerFunc {
 			}
 		}
 
-		common.WriteHTML(rw, http.StatusAccepted, raymond.MustRender(router.Templates["index"], map[string]interface{}{
+		res, err := raymond.Render(router.Templates["index"], map[string]interface{}{
 			"version": router.Version,
 			"urls":    names,
-		}))
+		})
+
+		fmt.Println(res)
+		fmt.Println(err)
+		fmt.Println(router.Templates["index"])
+
+		fmt.Println("Checkpoint")
+		common.WriteHTML(rw, http.StatusAccepted, res)
+		fmt.Println("Checkpoint")
+
 	}
 }
