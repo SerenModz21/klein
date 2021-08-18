@@ -63,7 +63,7 @@ func (router UrlRouter) DeleteUrl() http.HandlerFunc {
 		if data, error := router.Service.Delete(mux.Vars(r)["slug"], r.URL.Query().Get("delete")); error != nil {
 			common.WriteJson(rw, http.StatusForbidden, NormalResponse{
 				Success: false,
-				Message: fmt.Sprintf("Either the user was not found or you provided an invalid key, error for debugging purposes: %s", error.Error()),
+				Message: fmt.Sprintf("Either the url was not found or you provided an invalid key, error for debugging purposes: %s", error.Error()),
 			})
 		} else {
 			common.WriteJson(rw, http.StatusAccepted, DataResponse{

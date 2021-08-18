@@ -49,6 +49,7 @@ func main() {
 
 	apiSubRouter := router.PathPrefix(fmt.Sprintf("/api/%s", version)).Subrouter()
 	apiSubRouter.HandleFunc("/{slug}", urlRouter.DeleteUrl()).Methods(http.MethodDelete)
+	apiSubRouter.HandleFunc("/{slug}", urlRouter.RedirectUrl()).Methods(http.MethodGet)
 	apiSubRouter.HandleFunc("/shorten", urlRouter.ShortenUrl()).Methods(http.MethodPost)
 
 	log.Info("now listening on port", configuration.Port)

@@ -13,6 +13,7 @@
         <h1>Klein {{ version }}</h1>
         <input type="url" placeholder="Your url here..." name="url" id="url"><br>
         <button onclick="shortenUrl();">Shorten</button>
+        <button onclick="deleteUrl();">Delete</button>
     </div>
 
     <div>
@@ -164,23 +165,39 @@
     }
 </style>
 <script>
-    const shortenUrl = async () => {
-        let toast = document.createElement('div');
+    const createSnack = () => {
+        const toast = document.createElement('div');
         toast.id = 'snackbar';
 
         document.body.appendChild(toast);
-        toast = document.getElementById('snackbar');
 
+        return {
+            element: document.getElementById('snackbar'),
+            setText(text) {
+                this.element.innerText = text;
+                return this;
+            },
+            show(timeout = 10000) {
+                this.element.classList.add('show');
+
+                setTimeout(() => {
+                    this.element.classList.remove('show');
+                    this.element.remove();
+                }, timeout);
+
+                return this;
+            }
+        };
+    }
+
+    const shortenUrl = async () => {
         const response = await (await fetch(`/api/v1/shorten?url=${document.getElementById('url').value}`, { method: 'POST' })).json();
-        console.log(response);
+        createSnack().setText(response.message).show();
+    }
 
-        toast.innerText = response.message;
-        toast.classList.add('show');
-
-        setTimeout(() => {
-            toast.className = toast.classList.remove('show');
-            toast.remove();
-        }, 10000);
+    const deleteUrl = async () => {
+        const response = await (await fetch(`/api/v1/${document.getElementById('url').value.split('/')[3]}`, { method: 'DELETE' })).json();
+        createSnack().setText(response.message).show();
     }
 </script>
 
