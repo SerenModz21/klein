@@ -100,14 +100,13 @@ Distributed under the GPL3 License. See `LICENSE` for more information.
 * [SerenModz21](https://github.com/SerenModz21)
 * [Maybe you? ;)](https://github.com/pinkcig/klein/issues)
 
-[contributors-shield]: https://img.shields.io/github/contributors/pinkcig/repo.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/pinkcig/klein.svg?style=for-the-badge
 [contributors-url]: https://github.com/pinkcig/klein/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/pinkcig/repo.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/pinkcig/klein.svg?style=for-the-badge
 [forks-url]: https://github.com/pinkcig/klein/network/members
-[stars-shield]: https://img.shields.io/github/stars/pinkcig/repo.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/pinkcig/klein.svg?style=for-the-badge
 [stars-url]: https://github.com/pinkcig/klein/stargazers
-[issues-shield]: https://img.shields.io/github/issues/pinkcig/repo.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/pinkcig/klein.svg?style=for-the-badge
 [issues-url]: https://github.com/pinkcig/klein/issues
-[license-shield]: https://img.shields.io/github/license/pinkcig/repo.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/pinkcig/klein.svg?style=for-the-badge
 [license-url]: https://github.com/pinkcig/klein/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
